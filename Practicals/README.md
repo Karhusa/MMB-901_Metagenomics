@@ -147,7 +147,8 @@ Or if you know how [parallel](https://www.gnu.org/software/parallel/parallel_tut
 ```bash
 export TMPDIR=.
 
-module load biokit
+module load bio-apps/v202603
+module load sra-tools/3.3.0
 
 mkdir -p 01_DATA
 

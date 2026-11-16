@@ -191,10 +191,10 @@ We use two widely used programs that are pre-installed in Roihu:
 cd /scratch/project_2022405/$USER/MMB-901_Metagenomics
 mkdir 01_DATA/FASTQC
 
-module load biokit
+module load bio-apps
+module load fastqc
 fastqc --threads $SLURM_CPUS_PER_TASK --outdir 01_DATA/FASTQC 01_DATA/*.fastq.gz
 
-module purge
 module load multiqc
 
 multiqc --interactive --outdir 01_DATA/FASTQC 01_DATA/FASTQC/

@@ -611,22 +611,3 @@ TF45_6wk_placebo        Data/SRR11941485_1.fastq.gz    Data/SRR11941485_2.fastq.
 TF45_26wk_placebo       Data/SRR11941486_1.fastq.gz    Data/SRR11941486_2.fastq.gz
 TF45_12wk_placebo       Data/SRR11941487_1.fastq.gz    Data/SRR11941487_2.fastq.gz
 ```
-
-
-
-Then we can import the resulting file `semibin_collection.txt` to anvi'o.  
-
-```bash
-module load anvio/8
-
-anvi-import-collection \
-    -C Semibin2 \
-    -c 03_ANVIO/CONTIGS.db \
-    -p 04_MAPPING/MERGED/PROFILE.db \
-    --contigs-mode \
-    08_AUTOMATED_BINNING/semibin_collection.txt
-```
-
-Then open the interactive interface and from "Bins" tab, click "Load bin collection" and select the correct collection. This will take some time, so be ___p-a-t-i-e-n-t___.  
-
-You can also try to make similar figures from few bins as in the blog post [Visualizing the fate of contigs across metagenomic binning algorithms](https://merenlab.org/2020/01/02/visualizing-metagenomic-bins/). You need to export your own collection and semibin collection from anvi'o and then copy the script that was used to make those figures. And you also need to modify the script to read in the correct input files having the binning results. Read the blog post carefully and inspect the script and its comments.

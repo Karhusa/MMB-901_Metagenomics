@@ -448,10 +448,9 @@ echo "MetaBAT2 finished"
 
 ### Semibin2
 
+Semibin2 uses deep learning in metagenomic binning and has pre-trained models for several different environments, including human gut. However, with multiple samples the pre-trained models cannot be used and we would need to train the model with our data. The model training takes some time, although it might be more accurate. Running Semibin2 with pre-trained model is a lot faster and but will prefer accuracy over speed on this course and use the differential coverage information from the nine samples to train the model.  
 
-Semibin2 uses deep learning in metagenomic binning and has pre-trained models for several different environments, including human gut. However, with multiple samples the pre-trained models cannot be used and we would need to train the model with our data. The model training takes some time, although it might be more accurate. Running Semibin2 with pre-trained model is a lot faster and we will prefer speed over accuracy on this course. In case we have time, we can try the multi-sample mode for our data.  
-
-We will use the same files we created and used in the manual binning with anvi'o. The job can be run interactively or as a batch job. You will need at least 6 CPUs, 50G of memory, 100G of local storage and many hours (to be sure this time).  
+We will use the same files as with Metabat. The job can be run interactively or as a batch job. You will need at least 6 CPUs, 50G of memory, 100G of local storage and many hours (to be sure this time).  
 Allocate the resources or write a batch job script and use the following command to run Semibin2.  
 
 Also make sure to run this from our course main folder (MMB-901_Metagenomics) so that all the paths are right.  
@@ -569,7 +568,7 @@ We will download all the data from three recipients. Two from the FMT and one fr
 The subject identifiers for these are:
 
 ```bash
-TF13
+TF38
 TF29
 TF45
 ```
@@ -596,23 +595,4 @@ And of there were errors or problems with the download, you can copy the files f
 ```bash
 # we can use the same bowtie index
 # and a modified version of the mapping.sh script
-```
-
-We might need this??  
-__samples.txt:__
-
-```bash
-sample  r1  r2
-TF13_12wk_FMT   Data/SRR11941425_1.fastq.gz    Data/SRR11941425_2.fastq.gz
-TF13_BL_FMT     Data/SRR11941661_1.fastq.gz    Data/SRR11941661_2.fastq.gz
-TF13_6wk_FMT    Data/SRR11941662_1.fastq.gz    Data/SRR11941662_2.fastq.gz
-TF13_26wk_FMT   Data/SRR11941663_1.fastq.gz    Data/SRR11941663_2.fastq.gz
-TF29_BL_FMT     Data/SRR11941593_1.fastq.gz    Data/SRR11941593_2.fastq.gz
-TF29_6wk_FMT    Data/SRR11941594_1.fastq.gz    Data/SRR11941594_2.fastq.gz
-TF29_26wk_FMT   Data/SRR11941595_1.fastq.gz    Data/SRR11941595_2.fastq.gz
-TF29_12wk_FMT   Data/SRR11941596_1.fastq.gz    Data/SRR11941596_2.fastq.gz
-TF45_BL_placebo Data/SRR11941426_1.fastq.gz    Data/SRR11941426_2.fastq.gz
-TF45_6wk_placebo        Data/SRR11941485_1.fastq.gz    Data/SRR11941485_2.fastq.gz
-TF45_26wk_placebo       Data/SRR11941486_1.fastq.gz    Data/SRR11941486_2.fastq.gz
-TF45_12wk_placebo       Data/SRR11941487_1.fastq.gz    Data/SRR11941487_2.fastq.gz
 ```

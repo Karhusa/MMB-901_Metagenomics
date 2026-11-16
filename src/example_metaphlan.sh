@@ -9,7 +9,6 @@
 #SBATCH --mem 50G
 #SBATCH --account project_XXXXXXX
 #SBATCH --array=1-9
-#SBATCH --gres=nvme:100
 
 module load bio-apps/v202603
 module load py-metaphlan/4.2.4

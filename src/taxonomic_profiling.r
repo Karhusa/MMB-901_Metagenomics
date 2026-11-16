@@ -1,5 +1,5 @@
 ## Some setup for R packages needed for the analysis
-.libPaths(c("/projappl/project_2016640/project_rpackages_r451", .libPaths()))
+.libPaths(c("/projappl/project_2022405/project_rpackages_r451", .libPaths()))
 
 # Load required libraries
 library(tidyverse)
@@ -15,7 +15,7 @@ setwd("")
 metadata <- read.table("doc/metadata.txt", header = TRUE, row.names = 1)
 
 ## Read in the metaphlan file as a TreeSummarizedExperiment object
-tse <- mia::importMetaPhlAn("05_TAXONOMY/metaphlan.txt", assay.type="counts")
+tse <- mia::importMetaPhlAn("03_TAXONOMY/metaphlan.txt", assay.type="counts")
 
 ## Save the common samples
 common.samples <- intersect(colnames(tse), rownames(metadata))
@@ -35,5 +35,5 @@ phy <- convertToPhyloseq(tse)
 phy %>% ord_explore()
 
 # Finally, save both objects for later use
-saveRDS(phy, file = "05_TAXONOMY/phyloseq_metaphlan4.rds")
-saveRDS(tse, file = "05_TAXONOMY/tse_metaphlan4.rds")
+saveRDS(phy, file = "03_TAXONOMY/phyloseq_metaphlan4.rds")
+saveRDS(tse, file = "03_TAXONOMY/tse_metaphlan4.rds")

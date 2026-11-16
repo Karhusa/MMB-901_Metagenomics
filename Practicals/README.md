@@ -193,9 +193,10 @@ mkdir 01_DATA/FASTQC
 
 module load bio-apps/v202603
 module load fastqc/0.12.1
+
 fastqc --threads $SLURM_CPUS_PER_TASK --outdir 01_DATA/FASTQC 01_DATA/*.fastq.gz
 
-module load multiqc/1.35
+module load py-multiqc/1.35
 
 multiqc --interactive --outdir 01_DATA/FASTQC 01_DATA/FASTQC/
 ```
@@ -326,6 +327,9 @@ We use [bowtie2](https://bowtie-bio.sourceforge.net/bowtie2/index.shtml) for the
 
 ```bash
 mkdir -p 04_MAPPING
+module load bio-apps/v202603
+module load bowtie2/2.5.4
+
 bowtie2-build 02_ASSEMBLY/contigs.fasta 04_MAPPING/contigs --threads $SLURM_CPUS_PER_TASK
 ```
 

@@ -4,7 +4,7 @@ __Table of Contents:__
 
 1. [Introduction](#introduction)
 2. [Setup](#setup)
-    1. [Connnecting to Roihu](#connecting-to-Roihu-with-visual-studio-code)
+    1. [Connnecting to Roihu](#connecting-to-Roihu)
     2. [Setting up](#setting-up-the-course-folders)
     3. [Interactive use of Roihu](#interactive-use-of-Roihu)
 3. [Data](#data)
@@ -23,7 +23,7 @@ __Table of Contents:__
 On this course we will use a subset from a publicly available human gut metagenomic sequencing data from fecal microbiota transplantation (FMT) study: [Wilson, B.C., Vatanen, T., Jayasinghe, T.N. _et al._ Strain engraftment competition and functional augmentation in a multi-donor fecal microbiota transplantation trial for obesity. Microbiome 9, 107 (2021)](https://doi.org/10.1186/s40168-021-01060-7).  
 There is also a 4-year follow-up study, if you're interested: [Long-term health outcomes in adolescents with obesity treated with faecal microbiota transplantation: 4-year follow-up](https://www.nature.com/articles/s41467-025-62752-4).  
 
-Using read-based and assembly-based approaches, we will study the human gut microbiome. With read-based approach we will determine the taxonomic composition of one donor microbiome (female super-donor DF16) and compare to those the taxonomic composition of the recipient microbiomes taken at baseline and at 6, 12 and 26 weeks after the FMT. With assembly based approach, we will use [anvi'o](anvio.org) to construct metagenome-assembled genomes (MAGs) from the donor samples. Then we will assees the strain engrafment of selected strains in a selected set of recipients.  
+Using read-based and assembly-based approaches, we will study the human gut microbiome. With read-based approach we will determine the taxonomic composition of one donor microbiome (female super-donor DF16) and compare to those the taxonomic composition of the recipient microbiomes taken at baseline and at 6, 12 and 26 weeks after the FMT. With assembly based approach, we will construct metagenome-assembled genomes (MAGs) from the donor samples. Then we will assees the strain engrafment of selected strains in a selected set of recipients.  
 
 ## Connecting to Roihu
 
@@ -191,11 +191,11 @@ We use two widely used programs that are pre-installed in Roihu:
 cd /scratch/project_2022405/$USER/MMB-901_Metagenomics
 mkdir 01_DATA/FASTQC
 
-module load bio-apps
-module load fastqc
+module load bio-apps/v202603
+module load fastqc/0.12.1
 fastqc --threads $SLURM_CPUS_PER_TASK --outdir 01_DATA/FASTQC 01_DATA/*.fastq.gz
 
-module load multiqc
+module load multiqc/1.35
 
 multiqc --interactive --outdir 01_DATA/FASTQC 01_DATA/FASTQC/
 ```
@@ -266,7 +266,8 @@ When all the metaphlan jobs are finished, we can go on with the data analysis of
 But before we can read the data into R, we need to combine the individual metaphlan outputs and extract the species level annotations from there.  
 
 ```bash
-module load metaphlan/4.2.4
+module load bio-apps/v202603
+module load py-metaphlan/4.2.4
 merge_metaphlan_tables.py 03_TAXONOMY/SRR*.txt > 03_TAXONOMY/metaphlan.txt
 ```
 
@@ -299,7 +300,7 @@ While you wait for the resources, have a look at the quast manual and read about
 Then when you're connected to a computing node and have read about the options from the manual, run quast.
 
 ```bash
-module load quast/5.2.0 
+module load quast/5.3.0 
 metaquast.py 02_ASSEMBLY/contigs.fasta --max-ref-num 0 --threads $SLURM_CPUS_PER_TASK -o 02_ASSEMBLY/QUAST --fast
 ```
 

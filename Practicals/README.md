@@ -213,15 +213,18 @@ cat 01_DATA/SRR*_1.fastq.gz > 01_DATA/DF16_1.fastq.gz
 cat 01_DATA/SRR*_2.fastq.gz > 01_DATA/DF16_2.fastq.gz
 ```
 
-Then the actual assembly will be done with [spades](https://github.com/ablab/spades) using the `--meta` option meant for metagenomic data. As this will take longer, we'll run it as batch job.  
+Then the actual assembly will be done with [spades](https://github.com/ablab/spades) using the `--meta` option meant for metagenomic data and `--only-assembler` to skip the read correction part.  
+As this will take longer, we'll run it as batch job. The scheduling system in Roihu is called called SLURM.  
 
-Using AI, prepare a batch job script for running metagenomic assembly based on this information. Ask for a detailed description of the file content and the different options, so you understand what is going on.  
-You will need to request 12 CPUs, 150G of memory and 500G of local scratch space. The maximum time for the job is 16 hours.
-Roihu uses a scheduling system called SLURM.
+Using [Roihu](https://docs.csc.fi/computing/running/creating-job-scripts-roihu/) and [spades](https://github.com/ablab/spades#sec3.2) manuals, prepare a batch job script for running metagenomic assembly based on this information.  
+If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
+
+You will need to request 12 CPUs, 150G of memory and 500G of disaggregated storage. The maximum time for the job is 16 hours.
+
 Make sure the files names, folders, options and project number are correct.  
 Save the script as `src/spades.sh`.  
 
-You can also use [Roihu](https://docs.csc.fi/computing/running/creating-job-scripts-roihu/) and [spades](https://github.com/ablab/spades#sec3.2) manuals, to learn more.  
+You can also use  and  manuals, to learn more.  
 
 Then when you understand what we are about to do, submit the job with `sbatch`.  
 

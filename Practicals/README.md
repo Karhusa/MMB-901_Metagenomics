@@ -576,13 +576,13 @@ TF29
 TF45
 ```
 
-Find all accession numbers for these subjects from SRA and write them down.  
-You should have 12 read accessions to download.  
+Find all accession numbers for these subjects from SRA and write them down and save them in recipient_accessions.txt (one per line). Include samples collected at baseline, week 6, week 12, week 26 and year 4. You should have 15 read accessions to download.  
 
 Put the recipient data inside a `Data` folder in the `07_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
 
 ```bash
 mkdir Data
+
 ```
 
 Make an array job that downloads the read files for each accession with `fasterq-dump` and also compresses them with `pigz`. Use the metaphlan script as an example and the same commands we used to download the donor metagenomes.  
@@ -595,11 +595,107 @@ And of there were errors or problems with the download, you can copy the files f
 
 ### Mapping of recipient reads to donor MAGs
 
-We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same bowtie index we created for the donor reads in the binnign part.  
-In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor. 
-Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
-After that you can submit the job(s) and wait for them to finish.
+To investigate strain engraftment after FMT, we first need to map the recipient sequencing reads against the donor reference. We will use the whole DF16 donor assembly as the reference, so you can reuse the Bowtie2 index created earlier during the donor binning exercise.
+
+Refer to the Genome-resolved metagenomics – Mapping section of the course practicals for the original donor mapping commands. Use the donor mapping script as an example and modify it to process all paired-end FASTQ files in 07_RECIPIENTS/Data/. Map each sample against the donor assembly using Bowtie2, and use SAMtools to sort and index the resulting BAM files. Save the output files in 07_RECIPIENTS/Mapping/.
+
+Files used:
+* Accession list: 07_RECIPIENTS/recipient_accessions.txt
+* Input: 07_RECIPIENTS/Data/*.fastq.gz
+* Reference: Existing Bowtie2 index (04_MAPPING/contigs)
+* Output: 07_RECIPIENTS/Mapping/*.sorted.bam and *.sorted.bam.bai
+
+Run the mapping as a SLURM array job, with one task per recipient sample. You can use the same resources as in the donor mapping exercise (1 hour, 8 CPUs and 12 GB memory per task).
 
 ```bash
 sbacth src/YOUR_MAPPING_SCRIPT.sh
+```
+Once the jobs have finished, check that all 15 sorted BAM files and their index files are present in 07_RECIPIENTS/Mapping/.
+
+### Preparing the donor BAM file for inStrain
+
+Before running inStrain, we need to combine the nine donor BAM files created during the Genome-resolved metagenomics – Mapping exercise into one file. This will allow us to create a single strain profile for the DF16 donor.
+
+Create a directory for the inStrain analysis and prepare a SLURM batch script called src/merge_donor_bams.sh using the small partition, requesting 2 hours, 4 CPUs and 16 GB memory.
+
+Load the required modules and use SAMtools to merge the nine sorted donor BAM files and index the resulting file.
+
+```bash
+mkdir -p 07_RECIPIENTS/inStrain
+
+samtools merge -@ $SLURM_CPUS_PER_TASK \
+    07_RECIPIENTS/inStrain/DF16.sorted.bam \
+    04_MAPPING/SRR*.sorted.bam 
+
+samtools index 07_RECIPIENTS/inStrain/DF16.sorted.bam
+```
+
+Submit the batch script:
+
+```bash
+sbatch src/merge_donor_bams.sh
+```
+
+Make sure all nine donor BAM files were mapped against the same DF16 assembly. The merged BAM file will be used for donor strain profiling with inStrain.
+
+### Strain profiling with inStrain
+
+For this, we need two types of files:
+- BAM files: Contain DNA reads from the donor (DF16) and the 15 recipient samples, mapped to the donor assembly.
+- DF16 assembly (contigs.fasta): Contains the reconstructed DNA sequences from the donor and serves as our reference.
+
+inStrain uses these files to determine how much of the donor DNA is detected in each sample and how similar the DNA sequences are.
+
+Use `inStrain profile` to analyse the merged DF16 donor BAM file against the donor assembly. 
+
+**Files used:**
+- Donor input: `07_RECIPIENTS/inStrain/DF16.sorted.bam`
+- Recipient input: `07_RECIPIENTS/Mapping/*.sorted.bam`
+- Reference: `02_ASSEMBLY/contigs.fasta`
+- Output: `07_RECIPIENTS/inStrain/Profiles/` (one directory per sample)
+
+The command below runs `inStrain profile` for the DF16 donor sample, using the merged donor BAM file and the DF16 assembly. Next, modify the command to profile each of the 15 recipient BAM files against the same donor assembly. 
+
+Prepare a SLURM array job with 16 tasks (1 donor and 15 recipients), using the previous mapping exercise as an example. Use the `small` partition, requesting 4 hours, 8 CPUs and 32 GB memory per task.
+
+The script creates a separate output directory for each sample, named using its SRR accession number. Alternatively, you can modify the batch script to name the directories according to the recipient ID and sampling time point (e.g., `TF38_week6`) using the sample metadata. Think about how you could implement this to make the results easier to identify.
+
+```bash
+
+module purge
+module load bio-apps/v202603
+module load py-instrain/1.6.3
+
+mkdir -p 07_RECIPIENTS/inStrain/Profiles
+
+inStrain profile \
+    07_RECIPIENTS/inStrain/DF16.sorted.bam \
+    02_ASSEMBLY/contigs.fasta \
+    -o 07_RECIPIENTS/inStrain/Profiles/DF16 \
+    -p 8
+```
+
+Submit the job from your project directory:
+
+```bash
+sbatch src/instrain_profile.sh
+```
+Once the jobs have finished, check that all 16 inStrain profiles (one donor and 15 recipients) have been created successfully.
+
+### Comparing donor and recipient strains with inStrain
+
+Next, we will use inStrain compare to compare the nucleotide-level similarity between the DF16 donor and recipient samples. This will help us see whether donor bacterial strains are detected in recipients after FMT and whether they persist over time.
+
+We will compare all 16 inStrain profiles together (1 donor and 15 recipient samples) in a single analysis. This produces pairwise comparisons between samples, allowing us to examine both donor–recipient similarity and changes between recipient time points.
+
+Next, prepare a SLURM batch script called src/instrain_compare.sh using the small partition, requesting 12 hours, 8 CPUs and 128 GB memory. Load the required modules and run inStrain compare using all 16 profiles:
+
+```bash
+
+mkdir -p 07_RECIPIENTS/inStrain/Comparisons
+
+inStrain compare \
+    -i 07_RECIPIENTS/inStrain/Profiles/* \
+    -o 07_RECIPIENTS/inStrain/Comparisons/All_samples \
+    -p $SLURM_CPUS_PER_TASK
 ```

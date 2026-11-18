@@ -127,7 +127,7 @@ First we will retrieve all the metagenomic sequence files for the female super-d
 Go to the publication and find the sequencing project repository accession (BioProject accession).  
 Then go to [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra) and find all the reads for the project.  Open them in Run selector and find the run accessions of the samples from the super-donor (9 sequencing runs).  
 
-Finallly download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accesion, to the data folder in Roihu (`01_DATA/`).  
+Finally, download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accession, to the data folder in Roihu (`01_DATA/`).  
 We will use that file in the next step to download the data to Roihu.  
 
 We will use a tool called [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) from NCBI to download the sequencing read files. It is installed on Roihu by default under the biokit module, so we need to load that first.  
@@ -249,7 +249,7 @@ You can read about the basic usage from here: [metaphlan4 documentation](https:/
 To make things run a bit faster, we will run metaphlan as an [array job](https://docs.csc.fi/computing/running/array-jobs/). In a nutshell, all jobs will be run in parallel as individual jobs. This is a handy way to do the same thing for several files that are independent.  
 
 Use CSC documentation and metaphlan manual (and/or AI) to prepare a batch job script for running metaphlan4 as an array job based on this information. If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
-The You will need to request 8 CPUs, 50G of memory and 100G of local scratch space. The maximum time for the job is 1 hour.  
+The You will need to request 8 CPUs, 50G of memory. The maximum time for the job is 1 hour.  
 The version of metaphlan we'll use is 4.2.4 and it is installed on Roihu under the module `py-metaphlan/4.2.4` (needs also `bio-apps` module).
 
 Make sure the files names, folders, options and project number are correct and save the script as `src/metaphlan.sh`.  

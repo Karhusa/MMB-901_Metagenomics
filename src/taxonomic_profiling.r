@@ -14,6 +14,13 @@ setwd("")
 ## Read in the metadata file
 metadata <- read.table("doc/metadata.txt", sep="\t", header = TRUE, row.names = 1)
 
+## Clean metadata
+metadata <- metadata %>%
+  mutate(participant_type = recode(
+    participant_type,
+    "Recipient" = "recipient"
+  ))
+
 ## Read in the metaphlan file as a TreeSummarizedExperiment object
 tse <- mia::importMetaPhlAn("03_TAXONOMY/metaphlan.txt", assay.type="counts")
 

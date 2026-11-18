@@ -469,6 +469,13 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 ```bash
 awk 'NR!=1 {print $1"\tSemibin2_"$2}' 08_AUTOMATED_BINNING/contig_bins.tsv > 08_AUTOMATED_BINNING/semibin_collection.txt
 ```
+## DASTOOL or COMPARISON OF BINNING METHODS??
+
+If DASTOOL, then outputs from it will be used in the next step. 
+If we just compare methods, we could count the number of high-quality bins from each method and choose the better. 
+Can be done with simple `awk| wc -l` one-liner.
+
+THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
 
 ## MAG QC and taxonomy
 
@@ -526,14 +533,6 @@ gtdbtk classify_wf \
     --scratch_dir $TMPDIR \
     --tmpdir $TMPDIR
 ```
-
-## DASTOOL or COMPARISON OF BINNING METHODS??
-
-If DASTOOL, then outputs from it will be used in the next step. 
-If we just compare methods, we could count the number of high-quality bins from each method and choose the better. 
-Can be done with simple `awk| wc -l` one-liner.
-
-THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
 
 ## Phage part
 

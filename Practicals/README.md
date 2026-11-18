@@ -3,20 +3,16 @@
 __Table of Contents:__
 
 1. [Introduction](#introduction)
-2. [Setup](#setup)
-    1. [Connnecting to Roihu](#connecting-to-Roihu)
-    2. [Setting up](#setting-up-the-course-folders)
-    3. [Interactive use of Roihu](#interactive-use-of-Roihu)
-3. [Data](#data)
-4. [Quality control](#quality-control)
-5. [Metagenome assembly](#metagenome-assembly)
-6. [Read-based taxonomy](#read-based-taxonomy)
-7. [Assembly QC](#assembly-qc)
-8. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
-9. [MAG QC and taxonomy](#mag-qc-and-taxonomy)
-10. [MAG annotation](#mag-annotation)
-11. [Strain engraftment](#strain-engraftment)
-12. [Automatic binning](#automatic-binning)
+2. [Connnecting to Roihu](#connecting-to-Roihu)
+3. [Setup](#setup)
+4. [Data](#data)
+5. [Quality control](#quality-control)
+6. [Metagenome assembly](#metagenome-assembly)
+7. [Read-based taxonomy](#read-based-taxonomy)
+8. [Assembly QC](#assembly-qc)
+9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
+10. [MAG QC and taxonomy](#mag-qc-and-taxonomy)
+11. [Strain engraftment](#strain-engraftment-with-inStrain)
 
 ## Introduction
 
@@ -378,18 +374,21 @@ MetaBAT2 is an automated metagenomic binning tool that groups assembled contigs 
 
 We will use the assembly files and mapped reads created in the previous step. MetaBAT2 requires the assembled contigs in FASTA format and a contig-depth file generated from sorted BAM files. The depth file can be generated using jgi_summarize_bam_contig_depths, which is included with MetaBAT2.
 
-Since we did a co-assembly, we will use all nine BAM files together in one MetaBAT2 run for the binning. The resulting genome bins can then be compared with the bins obtained using SemiBin2 (below).The job will use 8 CPUs and 32 GB of memory, with an initial time allocation of 4 hours. 
+Since we did a co-assembly, we will use all nine BAM files together in one MetaBAT2 run for the binning. The resulting genome bins can then be compared with the bins obtained using SemiBin2 (below).The job will use 8 CPUs and 32 GB of memory, with an initial time allocation of 4 hours.  
 
-Create a folder for MetaBAT2 binning: 
+Create a folder for MetaBAT2 binning:  
+
 ```bash
 05_BINNING/METABAT2/
 ```
+
 To run MetaBAT2, we need three files:
+
 1. Assembled contigs (.fa / .fasta) to be grouped into MAGs
 2. Sorted bam files (.bam)
 3. Depth file (.txt) which will be created in the script
 
- Create a bash script in your src directory and run it using sbatch. I you use the script below, make sure you change all paths and filenames accordingly. 
+ Create a bash script in your src directory and run it using sbatch. I you use the script below, make sure you change all paths and filenames accordingly.  
 
 ```bash
 #!/bin/bash
@@ -433,6 +432,7 @@ metabat2 \
     -o "$OUT_DIR/bin" \
     -t "$SLURM_CPUS_PER_TASK"
 ```
+
 Run the script:
 
 ```bash
@@ -468,10 +468,11 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 ```bash
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
 ```
+
 ## DASTOOL or COMPARISON OF BINNING METHODS??
 
-If DASTOOL, then outputs from it will be used in the next step. 
-If we just compare methods, we could count the number of high-quality bins from each method and choose the better. 
+If DASTOOL, then outputs from it will be used in the next step.  
+If we just compare methods, we could count the number of high-quality bins from each method and choose the better.  
 Can be done with simple `awk| wc -l` one-liner.
 
 THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
@@ -584,7 +585,7 @@ And of there were errors or problems with the download, you can copy the files f
 ### Mapping of recipient reads to donor MAGs
 
 We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same bowtie index we created for the donor reads in the binnign part.  
-In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor. 
+In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor.  
 Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
 After that you can submit the job(s) and wait for them to finish.
 

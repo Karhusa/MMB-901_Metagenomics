@@ -219,7 +219,7 @@ As this will take longer, we'll run it as batch job. The scheduling system in Ro
 Using [Roihu](https://docs.csc.fi/computing/running/creating-job-scripts-roihu/) and [spades](https://github.com/ablab/spades#sec3.2) manuals, prepare a batch job script for running metagenomic assembly based on this information.  
 If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
 
-You will need to request 12 CPUs, 350G of memory and 500G of disaggregated storage. The maximum time for the job is 16 hours.
+You will need to request 12 CPUs, 400G of memory and 500G of disaggregated storage. The maximum time for the job is 16 hours.
 
 Use the paired-end FASTQ files DF16_1.fastq.gz and DF16_2.fastq.gz from 01_DATA/FASTQ/. Load SPAdes and use /sbf/data/spades_tmp for temporary files.
 

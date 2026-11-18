@@ -219,7 +219,9 @@ As this will take longer, we'll run it as batch job. The scheduling system in Ro
 Using [Roihu](https://docs.csc.fi/computing/running/creating-job-scripts-roihu/) and [spades](https://github.com/ablab/spades#sec3.2) manuals, prepare a batch job script for running metagenomic assembly based on this information.  
 If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
 
-You will need to request 12 CPUs, 150G of memory and 500G of disaggregated storage. The maximum time for the job is 16 hours.
+You will need to request 12 CPUs, 350G of memory and 500G of disaggregated storage. The maximum time for the job is 16 hours.
+
+Use the paired-end FASTQ files DF16_1.fastq.gz and DF16_2.fastq.gz from 01_DATA/FASTQ/. Load SPAdes and use /sbf/data/spades_tmp for temporary files.
 
 Make sure the files names, folders, options and project number are correct.  
 Save the script as `src/spades.sh`.  
@@ -467,6 +469,13 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 ```bash
 awk 'NR!=1 {print $1"\tSemibin2_"$2}' 08_AUTOMATED_BINNING/contig_bins.tsv > 08_AUTOMATED_BINNING/semibin_collection.txt
 ```
+## DASTOOL or COMPARISON OF BINNING METHODS??
+
+If DASTOOL, then outputs from it will be used in the next step. 
+If we just compare methods, we could count the number of high-quality bins from each method and choose the better. 
+Can be done with simple `awk| wc -l` one-liner.
+
+THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
 
 ## MAG QC and taxonomy
 
@@ -524,14 +533,6 @@ gtdbtk classify_wf \
     --scratch_dir $TMPDIR \
     --tmpdir $TMPDIR
 ```
-
-## DASTOOL or COMPARISON OF BINNING METHODS??
-
-If DASTOOL, then outputs from it will be used in the next step. 
-If we just compare methods, we could count the number of high-quality bins from each method and choose the better. 
-Can be done with simple `awk| wc -l` one-liner.
-
-THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
 
 ## Phage part
 

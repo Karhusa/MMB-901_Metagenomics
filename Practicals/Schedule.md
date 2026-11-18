@@ -6,7 +6,7 @@
   
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Introduction       | XXX |
+| 10-11 | Introduction       | [Slides](../lectures/01_introduction_2026.pdf) |
 | 11-12 | Setup              | [Instructions](README.md#setup)           |
 | 12-13 | Lunch break        | :plate_with_cutlery:                      |
 | 13-14 | Data retrieval     | [Instructions](README.md#data)            |
@@ -16,7 +16,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Assembly & Read-based approaches | XXX |
+| 10-11 | Assembly & Read-based approaches | [Slides](../lectures/02_assembly-and-read-based_2026.pdf) |
 | 11-12 | Read-based taxonomy | [Instructions](README.md#read-based-taxonomy) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | Metagenomic assembly | [Instructions](README.md#metagenome-assembly) |
@@ -25,7 +25,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Assembly QC and genome-resolved metagenomics | XXX |
+| 10-11 | Assembly QC and genome-resolved metagenomics | [Slides](../lectures/03_assembly_qc-and-genome-resoved_metagenomics_2026.pdf) |
 | 11-12 | Assembly QC | [Instructions](README.md#assembly-qc) |
 | 12-13 | Lunch break  | :plate_with_cutlery: |
 | 13-15 | Automatic binning| [Instructions](README.md#genome-resolved-metagenomics) |

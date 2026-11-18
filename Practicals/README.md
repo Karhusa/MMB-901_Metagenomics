@@ -127,7 +127,7 @@ First we will retrieve all the metagenomic sequence files for the female super-d
 Go to the publication and find the sequencing project repository accession (BioProject accession).  
 Then go to [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra) and find all the reads for the project.  Open them in Run selector and find the run accessions of the samples from the super-donor (9 sequencing runs).  
 
-Finally, download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accession, to the data folder in Roihu (`01_DATA/`).  
+Finallly download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accesion, to the data folder in Roihu (`01_DATA/`).  
 We will use that file in the next step to download the data to Roihu.  
 
 We will use a tool called [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) from NCBI to download the sequencing read files. It is installed on Roihu by default under the biokit module, so we need to load that first.  
@@ -249,7 +249,7 @@ You can read about the basic usage from here: [metaphlan4 documentation](https:/
 To make things run a bit faster, we will run metaphlan as an [array job](https://docs.csc.fi/computing/running/array-jobs/). In a nutshell, all jobs will be run in parallel as individual jobs. This is a handy way to do the same thing for several files that are independent.  
 
 Use CSC documentation and metaphlan manual (and/or AI) to prepare a batch job script for running metaphlan4 as an array job based on this information. If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
-The You will need to request 8 CPUs, 50G of memory. The maximum time for the job is 1 hour.  
+The You will need to request 8 CPUs, 50G of memory and 100G of local scratch space. The maximum time for the job is 1 hour.  
 The version of metaphlan we'll use is 4.2.4 and it is installed on Roihu under the module `py-metaphlan/4.2.4` (needs also `bio-apps` module).
 
 Make sure the files names, folders, options and project number are correct and save the script as `src/metaphlan.sh`.  
@@ -372,23 +372,22 @@ sbatch src/mapping.sh
 
 ### Metabat
 
-MetaBAT2 is an automated metagenomic binning tool that groups assembled contigs into metagenome-assembled genomes (MAGs). It uses sequence composition (tetranucleotide frequencies) and contig abundance (coverage) to identify groups of contigs that likely originate from the same microorganism. Unlike SemiBin2, MetaBAT2 does not use deep learning or require model training. It is relatively straightforward and computationally efficient, making it a suitable alternative for our purposes.
+MetaBAT2 is an automated metagenomic binning tool that groups assembled contigs into metagenome-assembled genomes (MAGs). It uses sequence composition (tetranucleotide frequencies) and contig abundance (coverage) to identify groups of contigs that likely originate from the same microorganism. Unlike SemiBin2, MetaBAT2 does not use deep learning or require model training, which makes it relatively straightforward and computationally efficient.
 
 We will use the assembly files and mapped reads created in the previous step. MetaBAT2 requires the assembled contigs in FASTA format and a contig-depth file generated from sorted BAM files. The depth file can be generated using jgi_summarize_bam_contig_depths, which is included with MetaBAT2.
 
-We will run MetaBAT2 separately for all nine samples using batch jobs on Roihu. The resulting genome bins can then be compared with the bins obtained using SemiBin2 (below).The job will use 8 CPUs and 32 GB of memory, with an initial time allocation of 4 hours. The actual runtime will depend on the size of the assemblies and sequencing data.
+Since we did a co-assembly, we will use all nine BAM files together in one MetaBAT2 run for the binning. The resulting genome bins can then be compared with the bins obtained using SemiBin2 (below).The job will use 8 CPUs and 32 GB of memory, with an initial time allocation of 4 hours. 
 
 Create a folder for MetaBAT2 binning: 
 ```bash
 05_BINNING/METABAT2/
 ```
-
 To run MetaBAT2, we need three files:
-1. Assembled contigs (.fa / .fasta) providing sequences to be grouped into MAGs
+1. Assembled contigs (.fa / .fasta) to be grouped into MAGs
 2. Sorted bam files (.bam)
-3. Depth file (.txt), will be created in the script
+3. Depth file (.txt) which will be created in the script
 
-Since we did a co-assembly, we use all nine BAM files together in one MetaBAT2 run for the binning. Create a bash script in your METABAT directory. Run with sbatch and consider using tmux. 
+ Create a bash script in your src directory and run it using sbatch. I you use the script below, make sure you change all paths and filenames accordingly. 
 
 ```bash
 #!/bin/bash
@@ -408,31 +407,17 @@ module load bio-apps/v202603
 module load metabat/2.15
 
 # Input and output directories
-CONTIGS="PATH_TO_CONTIG_FILE" 
-BAM_DIR="PATH_TO_BAM_DIR" 
-OUT_DIR="/METABAT2_OUT" #DO NOT EDIT
+CONTIGS="PATH_TO_CONTIG_FILE"
+BAM_DIR="PATH_TO_BAM_DIR"
+OUT_DIR="05_BINNIG/METABAT2_OUT"
 
 mkdir -p "$OUT_DIR"
 
-# List all nine sorted BAM files
-BAMS=(
-    "$BAM_DIR/SAMPLE1.sorted.bam"
-    "$BAM_DIR/SAMPLE2.sorted.bam"
-    "$BAM_DIR/SAMPLE3.sorted.bam"
-    "$BAM_DIR/SAMPLE4.sorted.bam"
-    "$BAM_DIR/SAMPLE5.sorted.bam"
-    "$BAM_DIR/SAMPLE6.sorted.bam"
-    "$BAM_DIR/SAMPLE7.sorted.bam"
-    "$BAM_DIR/SAMPLE8.sorted.bam"
-    "$BAM_DIR/SAMPLE9.sorted.bam"
-)
-
-# Check input files
-for bam in "${BAMS[@]}"; do
-    [[ -s "$bam" ]] || { echo "Missing BAM: $bam"; exit 1; }
+# List all sorted BAM files using accession numbers
+BAMS=()
+for SAMPLE_ACC in $(cat 01_DATA/DF16_accessions.txt); do
+    BAMS+=("$BAM_DIR/${SAMPLE_ACC}.sorted.bam")
 done
-
-[[ -s "$CONTIGS" ]] || { echo "Missing contigs FASTA"; exit 1; }
 
 # Generate contig depth file
 jgi_summarize_bam_contig_depths \
@@ -445,8 +430,11 @@ metabat2 \
     -a "$OUT_DIR/depth.txt" \
     -o "$OUT_DIR/bin" \
     -t "$SLURM_CPUS_PER_TASK"
+```
+Run the script:
 
-echo "MetaBAT2 finished"
+```bash
+sbatch src/metabat2.sh
 ```
 
 ### Semibin2
@@ -576,13 +564,13 @@ TF29
 TF45
 ```
 
-Find all accession numbers for these subjects from SRA and write them down and save them in recipient_accessions.txt (one per line). Include samples collected at baseline, week 6, week 12, week 26 and year 4. You should have 15 read accessions to download.  
+Find all accession numbers for these subjects from SRA and write them down.  
+You should have 12 read accessions to download.  
 
 Put the recipient data inside a `Data` folder in the `07_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
 
 ```bash
 mkdir Data
-
 ```
 
 Make an array job that downloads the read files for each accession with `fasterq-dump` and also compresses them with `pigz`. Use the metaphlan script as an example and the same commands we used to download the donor metagenomes.  
@@ -595,107 +583,11 @@ And of there were errors or problems with the download, you can copy the files f
 
 ### Mapping of recipient reads to donor MAGs
 
-To investigate strain engraftment after FMT, we first need to map the recipient sequencing reads against the donor reference. We will use the whole DF16 donor assembly as the reference, so you can reuse the Bowtie2 index created earlier during the donor binning exercise.
-
-Refer to the Genome-resolved metagenomics – Mapping section of the course practicals for the original donor mapping commands. Use the donor mapping script as an example and modify it to process all paired-end FASTQ files in 07_RECIPIENTS/Data/. Map each sample against the donor assembly using Bowtie2, and use SAMtools to sort and index the resulting BAM files. Save the output files in 07_RECIPIENTS/Mapping/.
-
-Files used:
-* Accession list: 07_RECIPIENTS/recipient_accessions.txt
-* Input: 07_RECIPIENTS/Data/*.fastq.gz
-* Reference: Existing Bowtie2 index (04_MAPPING/contigs)
-* Output: 07_RECIPIENTS/Mapping/*.sorted.bam and *.sorted.bam.bai
-
-Run the mapping as a SLURM array job, with one task per recipient sample. You can use the same resources as in the donor mapping exercise (1 hour, 8 CPUs and 12 GB memory per task).
+We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same bowtie index we created for the donor reads in the binnign part.  
+In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor. 
+Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
+After that you can submit the job(s) and wait for them to finish.
 
 ```bash
 sbacth src/YOUR_MAPPING_SCRIPT.sh
-```
-Once the jobs have finished, check that all 15 sorted BAM files and their index files are present in 07_RECIPIENTS/Mapping/.
-
-### Preparing the donor BAM file for inStrain
-
-Before running inStrain, we need to combine the nine donor BAM files created during the Genome-resolved metagenomics – Mapping exercise into one file. This will allow us to create a single strain profile for the DF16 donor.
-
-Create a directory for the inStrain analysis and prepare a SLURM batch script called src/merge_donor_bams.sh using the small partition, requesting 2 hours, 4 CPUs and 16 GB memory.
-
-Load the required modules and use SAMtools to merge the nine sorted donor BAM files and index the resulting file.
-
-```bash
-mkdir -p 07_RECIPIENTS/inStrain
-
-samtools merge -@ $SLURM_CPUS_PER_TASK \
-    07_RECIPIENTS/inStrain/DF16.sorted.bam \
-    04_MAPPING/SRR*.sorted.bam 
-
-samtools index 07_RECIPIENTS/inStrain/DF16.sorted.bam
-```
-
-Submit the batch script:
-
-```bash
-sbatch src/merge_donor_bams.sh
-```
-
-Make sure all nine donor BAM files were mapped against the same DF16 assembly. The merged BAM file will be used for donor strain profiling with inStrain.
-
-### Strain profiling with inStrain
-
-For this, we need two types of files:
-- BAM files: Contain DNA reads from the donor (DF16) and the 15 recipient samples, mapped to the donor assembly.
-- DF16 assembly (contigs.fasta): Contains the reconstructed DNA sequences from the donor and serves as our reference.
-
-inStrain uses these files to determine how much of the donor DNA is detected in each sample and how similar the DNA sequences are.
-
-Use `inStrain profile` to analyse the merged DF16 donor BAM file against the donor assembly. 
-
-**Files used:**
-- Donor input: `07_RECIPIENTS/inStrain/DF16.sorted.bam`
-- Recipient input: `07_RECIPIENTS/Mapping/*.sorted.bam`
-- Reference: `02_ASSEMBLY/contigs.fasta`
-- Output: `07_RECIPIENTS/inStrain/Profiles/` (one directory per sample)
-
-The command below runs `inStrain profile` for the DF16 donor sample, using the merged donor BAM file and the DF16 assembly. Next, modify the command to profile each of the 15 recipient BAM files against the same donor assembly. 
-
-Prepare a SLURM array job with 16 tasks (1 donor and 15 recipients), using the previous mapping exercise as an example. Use the `small` partition, requesting 4 hours, 8 CPUs and 32 GB memory per task.
-
-The script creates a separate output directory for each sample, named using its SRR accession number. Alternatively, you can modify the batch script to name the directories according to the recipient ID and sampling time point (e.g., `TF38_week6`) using the sample metadata. Think about how you could implement this to make the results easier to identify.
-
-```bash
-
-module purge
-module load bio-apps/v202603
-module load py-instrain/1.6.3
-
-mkdir -p 07_RECIPIENTS/inStrain/Profiles
-
-inStrain profile \
-    07_RECIPIENTS/inStrain/DF16.sorted.bam \
-    02_ASSEMBLY/contigs.fasta \
-    -o 07_RECIPIENTS/inStrain/Profiles/DF16 \
-    -p 8
-```
-
-Submit the job from your project directory:
-
-```bash
-sbatch src/instrain_profile.sh
-```
-Once the jobs have finished, check that all 16 inStrain profiles (one donor and 15 recipients) have been created successfully.
-
-### Comparing donor and recipient strains with inStrain
-
-Next, we will use inStrain compare to compare the nucleotide-level similarity between the DF16 donor and recipient samples. This will help us see whether donor bacterial strains are detected in recipients after FMT and whether they persist over time.
-
-We will compare all 16 inStrain profiles together (1 donor and 15 recipient samples) in a single analysis. This produces pairwise comparisons between samples, allowing us to examine both donor–recipient similarity and changes between recipient time points.
-
-Next, prepare a SLURM batch script called src/instrain_compare.sh using the small partition, requesting 12 hours, 8 CPUs and 128 GB memory. Load the required modules and run inStrain compare using all 16 profiles:
-
-```bash
-
-mkdir -p 07_RECIPIENTS/inStrain/Comparisons
-
-inStrain compare \
-    -i 07_RECIPIENTS/inStrain/Profiles/* \
-    -o 07_RECIPIENTS/inStrain/Comparisons/All_samples \
-    -p $SLURM_CPUS_PER_TASK
 ```

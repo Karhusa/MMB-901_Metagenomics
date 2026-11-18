@@ -10,7 +10,7 @@
 | 11-12 | Setup              | [Instructions](README.md#setup)           |
 | 12-13 | Lunch break        | :plate_with_cutlery:                      |
 | 13-14 | Data retrieval     | [Instructions](README.md#data)            |
-| 14-16 | Quality control    | [Instructions](README.md#data)            |
+| 14-16 | Quality control    | [Instructions](README.md#quality-control))            |
 
 ### Wednesday
 
@@ -28,7 +28,7 @@
 | 10-11 | Assembly QC and genome-resolved metagenomics | [Slides](../lectures/03_assembly_qc-and-genome-resoved_metagenomics_2026.pdf) |
 | 11-12 | Assembly QC | [Instructions](README.md#assembly-qc) |
 | 12-13 | Lunch break  | :plate_with_cutlery: |
-| 13-15 | Setting up anvi'o files | [Instructions](README.md#genome-resolved-metagenomics) |
+| 13-15 | Automatic binning| [Instructions](README.md#genome-resolved-metagenomics) |
 | 15-16 | Self-assessment | in Moodle |
 
 ## Week 2
@@ -37,27 +37,27 @@
     
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Recap from Friday | [Slides](../lectures/04_Fri_recap.pdf) |
-| 11-12 | Manual binnning | [Instructions](README.md#interactive-use-and-binning) |
+| 10-11 | Recap from Friday | XXX |
+| 11-12 | Automatic binning cont'd and bin refinement | [Instructions](README.md#dastool-or-comparison-of-binning-methods) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-16 | Manual binnning cont'd | [Instructions](README.md#interactive-use-and-binning) |
+| 13-16 | MAG QC and taxonomy | [Instructions](README.md#mag-qc-and-taxonomy) |
 
 ### Wednesday
     
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-12 | Manual binnning cont'd | [Instructions](README.md#interactive-use-and-binning) |
+| 10-12 | MAG dereplication | XXX |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-16 | Manual binnning cont'd | [Instructions](README.md#interactive-use-and-binning) |
+| 13-16 | Strain engraftment / Viral metagenomics | XXX |
 
 ### Friday
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | MAG QC and taxonomy | [Slides](../lectures/05_mag_qc_and_taxonomy.pdf) |
-| 11-12 | MAG QC and taxonomy | [Instructions](README.md#mag-qc-and-taxonomy) |
+| 10-11 | Viral metagenomics intro | XXX |
+| 11-12 | Viral metagenomics / Strain engraftment cont'd | XXX |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-15 | MAG annotation | [Instructions](README.md#mag-annotation) |
+| 13-15 | Viral metagenomics | [Instructions](README.md#phage-part) |
 | 15-16 | Self-assesment | In Moodle |
 
 ## Week 3
@@ -66,18 +66,18 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-12 | Strain engraftment with anvi'o workflow | [Instructions](README.md#strain-engraftment) |
+| 10-12 | Strain engraftment analysis | [Instructions](README.md#strain-engraftment) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-16 | Strain engraftment with anvi'o workflow cont'd | [Instructions](README.md#strain-engraftment) |
+| 13-16 | Strain engraftment analysis cont'd | [Instructions](README.md#strain-engraftment) |
 
 ### Wednesday 
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Automatic binning | [Slides](../lectures/06_automatic_binning.pdf) |
-| 11-12 | Automatic binning | [Instructions](README.md#automatic-binning) |
+| 10-11 | Wrap-up | XXX |
+| 11-12 | Additional analysis | XXX |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-16 | Automatic binning cont'd | [Instructions](README.md#automatic-binning) |
+| 13-16 | Additional analysis | XXX |
 
 ### Friday
 
@@ -85,5 +85,5 @@
 | --- | --- | -- |
 | 10-12 | Group exam | in Moodle |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-15 | Q&A and wrap-up | [Slides](../lectures/07_wrap-up.pdf) |
+| 13-15 | Q&A and wrap-up | XXX |
 | 15-16 | Self-assesment | in Moodle |

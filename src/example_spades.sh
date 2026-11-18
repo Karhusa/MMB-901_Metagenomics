@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=12
-#SBATCH --mem=150G
+#SBATCH --mem=400G
 #SBATCH --account=project_2022405
 #SBATCH --bb="#BB_LUA SBF storagesize=200G path=/sbf/data"
 

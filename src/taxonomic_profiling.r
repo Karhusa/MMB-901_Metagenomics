@@ -14,6 +14,8 @@ setwd("")
 ## Read in the metadata file
 metadata <- read.table("doc/metadata.txt", sep="\t", header = TRUE, row.names = 1)
 
+# The metadata file has a line starting with Unclassified. Remove that either manually or with an R script.
+
 ## Clean metadata
 metadata <- metadata %>%
   mutate(participant_type = recode(

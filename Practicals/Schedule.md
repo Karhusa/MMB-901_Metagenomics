@@ -6,17 +6,17 @@
   
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Introduction       | [Slides](../lectures/01_introduction.pdf) |
+| 10-11 | Introduction       | XXX |
 | 11-12 | Setup              | [Instructions](README.md#setup)           |
 | 12-13 | Lunch break        | :plate_with_cutlery:                      |
 | 13-14 | Data retrieval     | [Instructions](README.md#data)            |
-| 14-16 | Quality control    | [Instructions](README.md#data)            |
+| 14-16 | Quality control    | [Instructions](README.md#quality-control))            |
 
 ### Wednesday
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Assembly & Read-based approaches | [Slides](../lectures/02_assembly-and-read-based.pdf) |
+| 10-11 | Assembly & Read-based approaches | XXX |
 | 11-12 | Read-based taxonomy | [Instructions](README.md#read-based-taxonomy) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | Metagenomic assembly | [Instructions](README.md#metagenome-assembly) |
@@ -25,7 +25,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Assembly QC and genome-resolved metagenomics | [Slides](../lectures/03_assembly_qc-and-genome-resoved_metagenomics.pdf) |
+| 10-11 | Assembly QC and genome-resolved metagenomics | XXX |
 | 11-12 | Assembly QC | [Instructions](README.md#assembly-qc) |
 | 12-13 | Lunch break  | :plate_with_cutlery: |
 | 13-15 | Automatic binning| [Instructions](README.md#genome-resolved-metagenomics) |
@@ -37,8 +37,8 @@
     
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-11 | Recap from Friday | [Slides](../lectures/04_Fri_recap.pdf) |
-| 11-12 | Automatic binning cont'd and bin refinement | [Instructions](README.md#genome-resolved-metagenomics)  |
+| 10-11 | Recap from Friday | XXX |
+| 11-12 | Automatic binning cont'd and bin refinement | [Instructions](README.md#dastool-or-comparison-of-binning-methods) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | MAG QC and taxonomy | [Instructions](README.md#mag-qc-and-taxonomy) |
 
@@ -57,7 +57,7 @@
 | 10-11 | Viral metagenomics intro | XXX |
 | 11-12 | Viral metagenomics / Strain engraftment cont'd | XXX |
 | 12-13 | Lunch break | :plate_with_cutlery: |
-| 13-15 | Viral metagenomics | XXX |
+| 13-15 | Viral metagenomics |  [Instructions]([Instructions](README.md#phage-part) |
 | 15-16 | Self-assesment | In Moodle |
 
 ## Week 3

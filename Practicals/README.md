@@ -624,7 +624,7 @@ And if there were errors or problems with the download, you can copy the files f
 
 ### Mapping of recipient reads to donor assemblies
 
-We will use the donor assembly as the reference for mapping the recipient reads. We can use the same Bowtie index we created for the donor reads in the binning part, located at/scratch/project_2022405/$USER/MMB-901_Metagenomics/04_MAPPING/.
+We will use the donor assembly as the reference for mapping the recipient reads. We can use the same Bowtie index we created for the donor reads in the binning step, located in /scratch/project_2022405/$USER/MMB-901_Metagenomics/04_MAPPING/.
 
 To map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor.  
 

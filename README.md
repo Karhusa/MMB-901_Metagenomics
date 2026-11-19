@@ -7,6 +7,8 @@
 5. [Learning outcomes](#learning-outcomes)
 6. [Organizers and teachers](#organizers-and-teachers)
 
+   https://github.com/karkman/MMB-901_Metagenomics/blob/main/mmb-901-course-2026%20(5).png
+
 ## General introduction
 
 In metagenomics all genetic material (DNA) in a sample matrix is sequenced and analyzed. Culture-dependent methods have obvious biases in microbial ecology, while uncultured taxa comprise a large fraction of microbial communities in complex ecosystems. For this reason, metagenomics has become a widely used tool for the analysis of microbial communities. Metagenomics has also many benefits compared to amplicon sequencing, as it gives information not only on the taxonomic diversity but also on the functional composition of microbial communities. Recent bioinformatic developments now allow the recovery of metagenome-assembled genomes (MAGs) at an incredible depth.

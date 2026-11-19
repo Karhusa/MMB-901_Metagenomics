@@ -574,11 +574,11 @@ INSTRUCTIONS HERE
 The next step is to determine the strain engraftment of the donor MAGs to few selected recipients.  
 Before we can run the workflow, we need to fetch the recipient data and map it against the donor MAGs.  
 
-First make a whole new folder for all this. And put all output files and files we make in this folder.
+First, make a whole new folder for the strain engraftment part. And put all output files and files we make in this folder.
 
 ```bash
-mkdir -p 07_RECIPIENTS
-cd 07_RECIPIENTS
+mkdir -p 08_RECIPIENTS
+cd 08_RECIPIENTS
 ```
 
 ### Fetch recipient data
@@ -593,9 +593,9 @@ TF45
 ```
 
 Find all accession numbers for these subjects from SRA and write them down.  
-You should have 12 read accessions to download.  
+You should have 15 read accessions to download.  
 
-Put the recipient data inside a `Data` folder in the `07_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
+Put the recipient data inside a `Data` folder in the `08_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
 
 ```bash
 mkdir Data
@@ -607,7 +607,7 @@ Make an array job that downloads the read files for each accession with `fasterq
 sbatch src/YOUR_ARRAY_SCRIPT.sh
 ```
 
-And of there were errors or problems with the download, you can copy the files from the course data folder (`/scratch/project_2022405/GutBugsData/Rawdata`).
+And if there were errors or problems with the download, you can copy the files from the course data folder (`/scratch/project_2022405/GutBugsData/Rawdata`).
 
 ### Mapping of recipient reads to donor MAGs
 

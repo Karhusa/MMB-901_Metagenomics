@@ -566,7 +566,7 @@ gtdbtk classify_wf \
 INSTRUCTIONS HERE
 
 ```bash
-06_PHAGES/
+07_PHAGES
 ```
 
 ## Strain engraftment with inStrain

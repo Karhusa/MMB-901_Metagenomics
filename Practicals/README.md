@@ -527,18 +527,18 @@ THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRA
 
 ## MAG taxonomy
 
-When the binning and  quality assesment is done we need to give a taxonomic annotation to each bin.  
+When the binning and quality assessment are done, we need to give a taxonomic annotation to each bin.
+
 We will use [GTDB-Tk](https://github.com/ecogenomics/gtdbtk) for the taxonomic annotation.  
 
-The MAG taxonomic annotation will be run as a batch job to be more efficient 
+The MAG taxonomic annotation can be run either interactively or as a batch job.
 
-Below you can find the scripts. Resources for the batch jobs are as follows:
+Below you can find the scripts. Resources for the batch/interactive jobs are as follows:
 
 __GTDB-Tk:__
 
-* 120G of memory
-* 2 hours of time
-* 200G of local storage
+* 50G of memory
+* 30 minutes of time
 * 10 CPUs
 
 You can use the spades script as a template.

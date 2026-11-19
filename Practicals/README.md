@@ -12,7 +12,9 @@ __Table of Contents:__
 8. [Assembly QC](#assembly-qc)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
 10. [MAG taxonomy](#mag-taxonomy)
-11. [Strain engraftment](#strain-engraftment-with-inStrain)
+11. [Viral metagenomics](#phage-part)
+12. [Strain engraftment](#strain-engraftment-with-inStrain)
+
 
 ## Introduction
 
@@ -561,7 +563,7 @@ gtdbtk classify_wf \
     --tmpdir $TMPDIR
 ```
 
-## Phage part
+## Viral metagenomics
 
 INSTRUCTIONS HERE
 

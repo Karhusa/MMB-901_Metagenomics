@@ -38,7 +38,7 @@
 | Time | Description | Link |
 | --- | --- | -- |
 | 10-11 | Recap from Friday | XXX |
-| 11-12 | Automatic binning cont'd and bin refinement | [Instructions](README.md#dastool-or-comparison-of-binning-methods) |
+| 11-12 | DASTool | [Instructions](README.md#dastool-or-comparison-of-binning-methods) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | MAG QC and taxonomy | [Instructions](README.md#mag-qc-and-taxonomy) |
 
@@ -46,7 +46,7 @@
     
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-12 | MAG dereplication | XXX |
+| 10-12 | Strain engraftment | XXX |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | Strain engraftment / Viral metagenomics | XXX |
 

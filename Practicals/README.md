@@ -11,7 +11,7 @@ __Table of Contents:__
 7. [Read-based taxonomy](#read-based-taxonomy)
 8. [Assembly QC](#assembly-qc)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
-10. [MAG QC and taxonomy](#mag-taxonomy)
+10. [MAG taxonomy](#mag-taxonomy)
 11. [Strain engraftment](#strain-engraftment-with-inStrain)
 
 ## Introduction

@@ -123,10 +123,10 @@ First we will retrieve all the metagenomic sequence files for the female super-d
 Go to the publication and find the sequencing project repository accession (BioProject accession).  
 Then go to [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra) and find all the reads for the project.  Open them in Run selector and find the run accessions of the samples from the super-donor (9 sequencing runs).  
 
-Finallly download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accesion, to the data folder in Roihu (`01_DATA/`).  
+Finally download only the accession numbers and make a file (`DF16_accessions.txt`) with only the accession, one line per accession, to the data folder in Roihu (`01_DATA/`).  
 We will use that file in the next step to download the data to Roihu.  
 
-We will use a tool called [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) from NCBI to download the sequencing read files. It is installed on Roihu by default under the biokit module, so we need to load that first.  
+We will use a tool called [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) from NCBI to download the sequencing read files. It is installed on Roihu by default under the bio-apps module, so we need to load that first.  
 But before downloading, have a look at the documentation to understand the different options we are using.  
 
 Apply for resources. This doesn't take that long, so no real need for screen session.  
@@ -180,7 +180,7 @@ Before running any real analyses, we should do quality control (QC) for the sequ
 
 We use two widely used programs that are pre-installed in Roihu:
 
-* [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for running the QC fpor each sequence file.
+* [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for running the QC for each sequence file.
 * [MultiQC](https://multiqc.info/) to combine the individual reports from FastQC.  
 
 ```bash
@@ -198,7 +198,7 @@ multiqc --interactive --outdir 01_DATA/FASTQC 01_DATA/FASTQC/
 ```
 
 After running the QC steps, download the MultiQC report (`.html`) file to your local computer and open it with browser.  
-We'll go thru the report together.  
+We'll go through the report together.  
 
 ## Metagenome assembly
 
@@ -210,7 +210,7 @@ cat 01_DATA/SRR*_2.fastq.gz > 01_DATA/DF16_2.fastq.gz
 ```
 
 Then the actual assembly will be done with [spades](https://github.com/ablab/spades) using the `--meta` option meant for metagenomic data and `--only-assembler` to skip the read correction part.  
-As this will take longer, we'll run it as batch job. The scheduling system in Roihu is called called SLURM.  
+As this will take longer, we'll run it as batch job. The scheduling system in Roihu is called SLURM.  
 
 Using [Roihu](https://docs.csc.fi/computing/running/creating-job-scripts-roihu/) and [spades](https://github.com/ablab/spades#sec3.2) manuals, prepare a batch job script for running metagenomic assembly based on this information.  
 If using AI, ask for a detailed description of the file content and the different options, so you understand what is going on.  
@@ -288,7 +288,7 @@ Then re-run the R part.
 
 ## Assembly QC
 
-Although it is not straightforward to assess the quality of a metagenomic assembly, we can still run a QC ananlysis and at least see what we got.  
+Although it is not straightforward to assess the quality of a metagenomic assembly, we can still run a QC analysis and at least see what we got.  
 We will use the metagenomic version of [QUAST](https://quast.sourceforge.net/docs/manual.html) for the job.  
 
 QUAST can be found from Roihu, so just need to load the quast module.  
@@ -584,7 +584,7 @@ And of there were errors or problems with the download, you can copy the files f
 
 ### Mapping of recipient reads to donor MAGs
 
-We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same bowtie index we created for the donor reads in the binnign part.  
+We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same bowtie index we created for the donor reads in the binning part.  
 In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor.  
 Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
 After that you can submit the job(s) and wait for them to finish.

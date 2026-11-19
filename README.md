@@ -1,4 +1,4 @@
-<img width="2633" height="1704" alt="mmb-901-course-2026 (5)" src="https://github.com/user-attachments/assets/c22f0181-c4ac-4e94-a682-6206cb2518ea" />
+
 # MMB-901 Microbial metagenomics
 
 1. [General introduction](#general-introduction)
@@ -8,7 +8,7 @@
 5. [Learning outcomes](#learning-outcomes)
 6. [Organizers and teachers](#organizers-and-teachers)
 
-   https://github.com/karkman/MMB-901_Metagenomics/blob/main/mmb-901-course-2026%20(5).png
+<img width="2633" height="1704" alt="mmb-901-course-2026 (5)" src="https://github.com/user-attachments/assets/c22f0181-c4ac-4e94-a682-6206cb2518ea" />
 
 ## General introduction
 

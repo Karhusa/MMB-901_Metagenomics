@@ -11,9 +11,10 @@ __Table of Contents:__
 7. [Read-based taxonomy](#read-based-taxonomy)
 8. [Assembly QC](#assembly-qc)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
-10. [MAG QC and taxonomy](#mag-qc-and-taxonomy)
-11. [ Viral metagenomics] (#phage-part)
+10. [MAG taxonomy](#mag-taxonomy)
+11. [Viral metagenomics](#phage-part)
 12. [Strain engraftment](#strain-engraftment-with-inStrain)
+
 
 ## Introduction
 
@@ -470,53 +471,80 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
 ```
 
-## DASTOOL or COMPARISON OF BINNING METHODS??
+## DASTool 
 
-If DASTOOL, then outputs from it will be used in the next step.  
-If we just compare methods, we could count the number of high-quality bins from each method and choose the better.  
-Can be done with simple `awk| wc -l` one-liner.
+[DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 
-THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
+Familiarize yourself with the Github pages of DASTool and prepare a bash script to modify the input using the Fasta_to_Contigs2Bin.sh helper script. For the SemiBin2 contigs you will need to gunzip them first. You can use the code below to save the uncompressed files in $TMPDIR.
 
-## MAG QC and taxonomy
+Remember to use the $TMPDIR/SemiBin2 as input for your Fasta_to_Contigs2Bin.sh helper script. Use the interactive node with 10GB memory, 16 CPUs, and 2 h time.
+Direct the output to a new directory /scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16.
 
-When the binning is done, it's time to assess the quality of the bins and give a taxonomic annotation to each bin.  
-We will use [CheckM2](https://github.com/chklovski/CheckM2) for assessing the quality of our MAGs and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk) for the taxonomic annotation.  
+```
+# Convert SemiBin2 bins (.fa.gz)
+mkdir -p "$TMPDIR/SemiBin2"
 
-The MAG quality control and taxonomic annotation will be run as a batch job to be more efficient and just for practice. Run them as separate batch jobs and start with the one that probably takes longer.  
-Below you can find the scripts. Resources for the batch jobs are as follows:
+for f in "$SEMIBIN"/*.fa.gz; do
+    [[ -e "$f" ]] || continue
+    gunzip -c "$f" > "$TMPDIR/SemiBin2/$(basename "${f%.gz}")"
+done
+```
+Also run the following in the script to have DASTool installation available.
 
-__CheckM2:__
+```
+# Load DAS Tool
+module load bio-apps/v202603
+export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
 
-* 20G of memory
-* 1 hour of time
-* 200G of local storage
-* 10 CPUs
+```
+
+Once the files are prepared, we will run DASTool with the options --write_bin_evals to write evaluations of input bin sets and --write_bins to export bins as fasta files.
+
+```
+# Load DAS Tool
+module load bio-apps/v202603
+export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
+
+# Output directory
+OUTDIR="/scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16"
+CONTIGS="/scratch/project_2022405/$USER/MMB-901_Metagenomics/02_ASSEMBLY/DF16/contigs.fasta"
+
+# Run DAS Tool
+DAS_Tool \
+    -i "$OUTDIR/SemiBin2_contigs2bin.tsv,$OUTDIR/MetaBAT2_contigs2bin.tsv" \
+    -l SemiBin2,MetaBAT2 \
+    -c "$CONTIGS" \
+    -o "$OUTDIR/DF16_DASTool" \
+    --write_bins \
+    --write_bin_evals \
+    --threads "$SLURM_CPUS_PER_TASK"
+```
+After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your computer to view the results. Then create a list of all high-quality MAGs (HQ bins) with SCG_completeness 90 or more and SCG_redundancy 5 or less in a file named DF16_high_quality_bins.txt.
+
+Check how many bins you had and how many of them were high quality before proceeding.
+
+Then write a script to move the high-quality bins to a new directory, HQ_BINS, using DF16_high_quality_bins.txt to select the correct bins to move.
+
+THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRAFTMENT ANALYSIS.
+
+## MAG taxonomy
+
+When the binning and quality assessment are done, we need to give a taxonomic annotation to each bin.
+
+We will use [GTDB-Tk](https://github.com/ecogenomics/gtdbtk) for the taxonomic annotation.  
+
+The MAG taxonomic annotation can be run either interactively or as a batch job.
+
+Below you can find the scripts. Resources for the batch/interactive jobs are as follows:
 
 __GTDB-Tk:__
 
-* 120G of memory
-* 2 hours of time
-* 200G of local storage
+* 50G of memory
+* 30 minutes of time
 * 10 CPUs
 
 You can use the spades script as a template.
 
-Remember to analyse the bins from each binning method separately and make sure you have the extensions correct for each method (for example wth Semibin2 it's `.fa.gz`).  
-
-### MAG QC with CheckM2
-
-```bash
-module load  bio-apps/v202603
-module load checkm2/1.1.0
-
-checkm2 predict \
-    --input BIN_FOLDER \
-    --output-directory BIN_FOLDER/checkm2 \
-    --extension fa \
-    --tmpdir $TMPDIR \
-    --threads $SLURM_CPUS_PER_TASK
-```
 
 ### MAG taxonomy with GTDB-Tk
 
@@ -525,8 +553,8 @@ module load  bio-apps/v202603
 module load py-gtdbtk/2.7.2
 
 gtdbtk classify_wf \
-    --genome_dir BIN_FOLDER \
-    --out_dir BIN_FOLDER/gtdbtk \
+    --genome_dir HQ_BINS \
+    --out_dir HQ_BINS/gtdbtk \
     --extension fa \
     --skip_ani_screen \
     --cpus $SLURM_CPUS_PER_TASK \
@@ -540,7 +568,7 @@ gtdbtk classify_wf \
 INSTRUCTIONS HERE
 
 ```bash
-06_PHAGES/
+07_PHAGES
 ```
 
 ## Strain engraftment with inStrain
@@ -548,11 +576,11 @@ INSTRUCTIONS HERE
 The next step is to determine the strain engraftment of the donor MAGs to few selected recipients.  
 Before we can run the workflow, we need to fetch the recipient data and map it against the donor MAGs.  
 
-First make a whole new folder for all this. And put all output files and files we make in this folder.
+First, make a whole new folder for the strain engraftment part. And put all output files and files we make in this folder.
 
 ```bash
-mkdir -p 07_RECIPIENTS
-cd 07_RECIPIENTS
+mkdir -p 08_RECIPIENTS
+cd 08_RECIPIENTS
 ```
 
 ### Fetch recipient data
@@ -567,9 +595,9 @@ TF45
 ```
 
 Find all accession numbers for these subjects from SRA and write them down.  
-You should have 12 read accessions to download.  
+You should have 15 read accessions to download.  
 
-Put the recipient data inside a `Data` folder in the `07_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
+Put the recipient data inside a `Data` folder in the `08_RECIPIENTS` folder. Make sure you store them as compressed files (`.gz`). And it might be a good idea to make an array batch job for this task.  
 
 ```bash
 mkdir Data
@@ -581,7 +609,7 @@ Make an array job that downloads the read files for each accession with `fasterq
 sbatch src/YOUR_ARRAY_SCRIPT.sh
 ```
 
-And of there were errors or problems with the download, you can copy the files from the course data folder (`/scratch/project_2022405/GutBugsData/Rawdata`).
+And if there were errors or problems with the download, you can copy the files from the course data folder (`/scratch/project_2022405/GutBugsData/Rawdata`).
 
 ### Mapping of recipient reads to donor MAGs
 

@@ -526,7 +526,17 @@ Check how many bins you had and how many of them were high quality before procee
 
 Then write a script to move the high-quality bins to a new directory, HQ_BINS, using DF16_high_quality_bins.txt to select the correct bins to move.
 
-THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRAFTMENT ANALYSIS.
+## DRep 
+
+Usually, we need to  dereplicate the bins for further analyses. This can be done using dRep. We will also prepare some files for or strain sharing analysis using dRep. Check the [dRep](https://github.com/MrOlm/drep) manual to see what is does. By chance, the DasTool genomes are already ANI 98% or more divergent, so we don't need to do further dereplication.
+
+However, we will need to run [parse_stb.py](https://github.com/MrOlm/drep/blob/master/helper_scripts/parse_stb.py) to get information about which scaffold belongs to which geneome before we do strain analyses. 
+Export the path and run the python program on the fasta files of the HQ bins.
+
+```
+export PATH="/projappl/project_2022405/drep/bin:$PATH"
+parse_stb.py --reverse -f HQ_BINS/*fa -o representitve_genomes.stb
+```
 
 ## MAG taxonomy
 

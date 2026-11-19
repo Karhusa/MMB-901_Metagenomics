@@ -469,7 +469,7 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
 ```
 
-## DASTOOL 
+## DASTool 
 
 [DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 
@@ -521,20 +521,14 @@ After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your compute
 
 THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRAFTMENT ANALYSIS.
 
-## MAG QC and taxonomy
+## MAG taxonomy
 
-When the binning is done, it's time to assess the quality of the bins and give a taxonomic annotation to each bin.  
-We will use [CheckM2](https://github.com/chklovski/CheckM2) for assessing the quality of our MAGs and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk) for the taxonomic annotation.  
+When the binning and  quality assesment is done we need to give a taxonomic annotation to each bin.  
+We will use [GTDB-Tk](https://github.com/ecogenomics/gtdbtk) for the taxonomic annotation.  
 
-The MAG quality control and taxonomic annotation will be run as a batch job to be more efficient and just for practice. Run them as separate batch jobs and start with the one that probably takes longer.  
+The MAG taxonomic annotation will be run as a batch job to be more efficient 
+
 Below you can find the scripts. Resources for the batch jobs are as follows:
-
-__CheckM2:__
-
-* 20G of memory
-* 1 hour of time
-* 200G of local storage
-* 10 CPUs
 
 __GTDB-Tk:__
 
@@ -547,19 +541,6 @@ You can use the spades script as a template.
 
 Remember to analyse the bins from each binning method separately and make sure you have the extensions correct for each method (for example wth Semibin2 it's `.fa.gz`).  
 
-### MAG QC with CheckM2
-
-```bash
-module load  bio-apps/v202603
-module load checkm2/1.1.0
-
-checkm2 predict \
-    --input BIN_FOLDER \
-    --output-directory BIN_FOLDER/checkm2 \
-    --extension fa \
-    --tmpdir $TMPDIR \
-    --threads $SLURM_CPUS_PER_TASK
-```
 
 ### MAG taxonomy with GTDB-Tk
 

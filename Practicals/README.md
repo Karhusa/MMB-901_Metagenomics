@@ -469,13 +469,57 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
 ```
 
-## DASTOOL or COMPARISON OF BINNING METHODS??
+## DASTOOL 
 
-If DASTOOL, then outputs from it will be used in the next step.  
-If we just compare methods, we could count the number of high-quality bins from each method and choose the better.  
-Can be done with simple `awk| wc -l` one-liner.
+[DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 
-THEN WE NEED MAG DEREPLICATION, MAPPING OF RECIPIENT READS TO MAGs, AND STRAIN ENGRAFTMENT ANALYSIS.
+Familiarize yourself with the Github pages of DASTool and prepare a bash script to modify the input using the Fasta_to_Contigs2Bin.sh helper script. For the SemiBin2 contigs you will need to gunzip them first. You can use the code below to save the uncompressed files in $TMPDIR.
+
+Remember to use the $TMPDIR/SemiBin2 as input for your Fasta_to_Contigs2Bin.sh helper script. Use the interactive node with 10GB memory, 16 CPUs, and 2 h time.
+Direct the output to a new directory /scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16.
+
+```
+# Convert SemiBin2 bins (.fa.gz)
+mkdir -p "$TMPDIR/SemiBin2"
+
+for f in "$SEMIBIN"/*.fa.gz; do
+    [[ -e "$f" ]] || continue
+    gunzip -c "$f" > "$TMPDIR/SemiBin2/$(basename "${f%.gz}")"
+done
+```
+Also run the following in the script to have DASTool installation available.
+
+```
+# Load DAS Tool
+module load bio-apps/v202603
+export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
+
+```
+
+Once the files are prepared, we will run DASTool with the options --write_bin_evals to write evaluations of input bin sets and --write_bins to export bins as fasta files.
+
+```
+# Load DAS Tool
+module load bio-apps/v202603
+export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
+
+# Output directory
+OUTDIR="/scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16"
+CONTIGS="/scratch/project_2022405/$USER/MMB-901_Metagenomics/02_ASSEMBLY/DF16/contigs.fasta"
+
+# Run DAS Tool
+DAS_Tool \
+    -i "$OUTDIR/SemiBin2_contigs2bin.tsv,$OUTDIR/MetaBAT2_contigs2bin.tsv" \
+    -l SemiBin2,MetaBAT2 \
+    -c "$CONTIGS" \
+    -o "$OUTDIR/DF16_DASTool" \
+    --write_bins \
+    --write_bin_evals \
+    --threads "$SLURM_CPUS_PER_TASK"
+```
+After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your computer to view the results. Then create a list of all high-quality MAGs (HQ bins) with SCG_completeness 90 or more and SCG_redundancy 5 or less in a file named high_quality_MAGS.txt.
+
+THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRAFTMENT ANALYSIS.
 
 ## MAG QC and taxonomy
 

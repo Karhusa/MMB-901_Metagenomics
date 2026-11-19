@@ -476,7 +476,7 @@ awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BI
 
 [DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 
-Familiarize yourself with the Github pages of DASTool and prepare a bash script to modify the input using the Fasta_to_Contigs2Bin.sh helper script. For the SemiBin2 contigs you will need to gunzip them first. You can use the code below to save the uncompressed files in $TMPDIR.
+Familiarize yourself with the GitHub pages of DASTool and prepare a bash script to modify the input using the Fasta_to_Contigs2Bin.sh helper script. For the SemiBin2 contigs, you will need to gunzip them first. Use the code below to save the uncompressed files in $TMPDIR.
 
 Remember to use the $TMPDIR/SemiBin2 as input for your Fasta_to_Contigs2Bin.sh helper script. Use the interactive node with 10GB memory, 16 CPUs, and 2 h time.
 Direct the output to a new directory /scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16.
@@ -635,7 +635,7 @@ After that, you can submit the job(s) and wait for them to finish.
 
 inStrain is a tool that uses a reference set of genomes or our assemblies and Bowtie2 mapping results to identify unique strains in a sample. The previous mapping results of the recipients against the donor assemblies will be used to identify possible identical strains in the participants.
 
-We will first need to run progical, which predicts genes for us in the assembly. Modify the script below and run interactively/use a batch job with 20G of memory for 30 min with 8 CPUs.
+We will first need to run progical, which predicts genes for us in the assembly. Modify the script below and run interactively/use a batch job with 20G of memory for 20 min with 8 CPUs.
 
 
 ```
@@ -647,13 +647,11 @@ inStrain has been installed for you in projappl.
 
 Check the [tutorial](https://instrain.readthedocs.io/en/latest/tutorial.html) and create an inStrain profile command using the scaffold file representative_genomes.stb we created using the dRep helper script.
 
-
+Modify the script below to include the correct BAM files for each recipient mapping and each donor mapping and the DF16 assembply contigs. This can be done in an array script with 50 GB of memory, 5 h of time, and 6 CPUs.
 
 ```
 export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
+inStrain profile mappingfile.bam DF16_contigs.fasta -o outputlocation.IS -p 6 -g genes.faa -s scaffoldtobin.stb --database_mode
+
 ```
 
-
-```bash
-sbacth src/YOUR_MAPPING_SCRIPT.sh
-```

@@ -618,7 +618,7 @@ We will use the whole assembly of the donor as the reference for mapping the rec
 
 In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor.  
 
-Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
+Create the files and put them in the `08_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
 After that you can submit the job(s) and wait for them to finish.
 
 ```bash

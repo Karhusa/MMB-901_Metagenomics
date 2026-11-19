@@ -3,7 +3,7 @@
 __Table of Contents:__
 
 1. [Introduction](#introduction)
-2. [Connnecting to Roihu](#connecting-to-Roihu)
+2. [Connecting to Roihu](#connecting-to-Roihu)
 3. [Setup](#setup)
 4. [Data](#data)
 5. [Quality control](#quality-control)
@@ -469,9 +469,10 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 
 ```bash
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
-```
+````
 
 ## DASTool 
+
 
 [DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 

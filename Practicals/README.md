@@ -631,6 +631,27 @@ To map the recipient reads to the donor assembly, we will use a modified version
 Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
 After that, you can submit the job(s) and wait for them to finish.
 
+### inStrain
+
+inStrain is a tool that uses a reference set of genomes or our assemblies and Bowtie2 mapping results to identify unique strains in a sample. The previous mapping results of the recipients against the donor assemblies will be used to identify possible identical strains in the participants.
+
+We will first need to run progical, which predicts genes for us in the assembly. Modify the script below.
+
+
+```
+ prodigal -i assembly.fasta -d genes.fna -a genes.faa
+```
+
+inStrain has been installed for you in projappl.
+
+Check the [tutorial](https://instrain.readthedocs.io/en/latest/tutorial.html) and create an inStrain profile command using the scaffold file representative_genomes.stb we created using the dRep helper script.
+
+
+
+```
+export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
+```
+
 
 ```bash
 sbacth src/YOUR_MAPPING_SCRIPT.sh

@@ -517,11 +517,11 @@ DAS_Tool \
     --write_bin_evals \
     --threads "$SLURM_CPUS_PER_TASK"
 ```
-After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your computer to view the results. Then create a list of all high-quality MAGs (HQ bins) with SCG_completeness 90 or more and SCG_redundancy 5 or less in a file named DF16_high_quality_bins.txt, and save it to 05_BINNING. 
+After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your computer to view the results. Then create a list of all high-quality MAGs (HQ bins) with SCG_completeness 90 or more and SCG_redundancy 5 or less in a file named DF16_high_quality_bins.txt.
 
 Check how many bins you had and how many of them were high quality before proceeding.
 
-Then write a script to move the high-quality bins to a new directory, 05_BINNING/HQ_BINS, using DF16_high_quality_bins.txt to select the correct bins to move.
+Then write a script to move the high-quality bins to a new directory, HQ_BINS, using DF16_high_quality_bins.txt to select the correct bins to move.
 
 THEN WE NEED MAPPING OF RECIPIENT READS TO MAGs OR ASSEMBLIES?, AND STRAIN ENGRAFTMENT ANALYSIS.
 
@@ -543,8 +543,6 @@ __GTDB-Tk:__
 
 You can use the spades script as a template.
 
-Remember to analyse the bins from each binning method separately and make sure you have the extensions correct for each method (for example wth Semibin2 it's `.fa.gz`).  
-
 
 ### MAG taxonomy with GTDB-Tk
 
@@ -553,8 +551,8 @@ module load  bio-apps/v202603
 module load py-gtdbtk/2.7.2
 
 gtdbtk classify_wf \
-    --genome_dir BIN_FOLDER \
-    --out_dir BIN_FOLDER/gtdbtk \
+    --genome_dir HQ_BINS \
+    --out_dir HQ_BINS/gtdbtk \
     --extension fa \
     --skip_ani_screen \
     --cpus $SLURM_CPUS_PER_TASK \

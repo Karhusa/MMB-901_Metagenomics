@@ -635,11 +635,12 @@ After that, you can submit the job(s) and wait for them to finish.
 
 inStrain is a tool that uses a reference set of genomes or our assemblies and Bowtie2 mapping results to identify unique strains in a sample. The previous mapping results of the recipients against the donor assemblies will be used to identify possible identical strains in the participants.
 
-We will first need to run progical, which predicts genes for us in the assembly. Modify the script below and run interactively/use a batch job with 20G of memory for 2h with 8 CPUs.
+We will first need to run progical, which predicts genes for us in the assembly. Modify the script below and run interactively/use a batch job with 20G of memory for 30 min with 8 CPUs.
 
 
 ```
- prodigal -i assembly.fasta -d genes.fna -a genes.faa
+export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
+prodigal -i assembly.fasta -d genes.fna -a genes.faa
 ```
 
 inStrain has been installed for you in projappl.

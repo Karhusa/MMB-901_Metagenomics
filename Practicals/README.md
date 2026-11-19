@@ -624,12 +624,15 @@ And if there were errors or problems with the download, you can copy the files f
 
 ### Mapping of recipient reads to donor MAGs
 
-We will use the whole assembly of the donor as the reference for mapping the recipient reads. So we can use the same Bowtie index we created for the donor reads in the binning part located in /scratch/project_2022405/$USER/MMB-901_Metagenomics/04_MAPPING/.
+We will use the created donor MAGs from DAS tool as the reference for mapping the recipient reads. For the mapping, we first need to concatenate the MAGs into a reference fasta file, which we will then use to do another indexing for Bowtie. Use `cat` for concatenating the bins into a fasta file. Then create a SLURM job script with 8 cpus-per-task for the indexing. You can use the previous indexing script as basis. Also, remember to give a prefix to the output index files. 
 
-In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor.  
+In order to map the recipient reads to the donor assembly, we will use a modified version of the mapping script we used for the donor reads. For this you will need to a file with all the recipient accessions, similar to the one we made for the donor. Create the files and put them in the `08_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor MAGs. After that you can submit the job(s) and wait for them to finish.
 
-Create the files and put them in the `07_RECIPIENTS` folder. Then modify the mapping script to read the recipient accessions and map them to the donor assembly.
-After that you can submit the job(s) and wait for them to finish.
+
+
+OR DO WE USE ASSEMBLIES So we can use the same bowtie index we created for the donor reads in the binning part.  
+  
+
 
 ```bash
 sbacth src/YOUR_MAPPING_SCRIPT.sh

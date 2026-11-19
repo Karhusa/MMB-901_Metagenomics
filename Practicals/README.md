@@ -103,7 +103,7 @@ You always need to specify the accounting project (`-A`, `--account`). Otherwise
 
 [__Read more about interactive use of Roihu.__](https://docs.csc.fi/computing/running/interactive-usage/#the-sinteractive-command)  
 
-[Tmux](https://docs.csc.fi/support/tutorials/tmux/index.html) is a handy way to run things in the background without losing them when you logout or have connection problems. However, you have to be careful whn using tmux, you can easily get lost.  
+[Tmux](https://docs.csc.fi/support/tutorials/tmux/index.html) is a handy way to run things in the background without losing them when you logout or have connection problems. However, you have to be careful when using tmux, you can easily get lost.  
 And to make things even more complicated, the sessions are specific to each login node. And Roihu has at least 4 login nodes.  
 
 __Remember to always first open a screen session and only after that run `sinteractive`.__  

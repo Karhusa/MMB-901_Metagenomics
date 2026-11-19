@@ -46,7 +46,7 @@
     
 | Time | Description | Link |
 | --- | --- | -- |
-| 10-12 | Strain engraftment | XXX |
+| 10-12 | Strain engraftment | [Instruction](README.md#Strain-engraftment-with-inStrain) |
 | 12-13 | Lunch break | :plate_with_cutlery: |
 | 13-16 | Strain engraftment / Viral metagenomics | XXX |
 

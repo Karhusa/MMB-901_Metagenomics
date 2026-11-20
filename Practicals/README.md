@@ -3,7 +3,7 @@
 __Table of Contents:__
 
 1. [Introduction](#introduction)
-2. [Connecting to Roihu](#connecting-to-Roihu)
+2. [Connecting to Roihu](#connecting-to-roihu)
 3. [Setup](#setup)
 4. [Data](#data)
 5. [Quality control](#quality-control)
@@ -12,9 +12,8 @@ __Table of Contents:__
 8. [Assembly QC](#assembly-qc)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
 10. [MAG taxonomy](#mag-taxonomy)
-11. [Viral metagenomics](#viral-metagnomics)
-12. [Strain engraftment](#strain-engraftment-with-inStrain)
-
+11. [Viral metagenomics](#viral-metagenomics)
+12. [Strain engraftment](#strain-engraftment-with-instrain)
 
 ## Introduction
 
@@ -532,10 +531,10 @@ Then write a script to move the high-quality bins to a new directory, HQ_BINS, u
 
 Usually, we need to  dereplicate the bins for further analyses. This can be done using dRep. We will also prepare some files for or strain sharing analysis using dRep. Check the [dRep](https://github.com/MrOlm/drep) manual to see what is does. By chance, the DasTool genomes are already ANI 98% or more divergent, so we don't need to do further dereplication.
 
-However, we will need to run [parse_stb.py](https://github.com/MrOlm/drep/blob/master/helper_scripts/parse_stb.py) to determine which scaffold belongs to which genome before we do strain analyses. 
+However, we will need to run [parse_stb.py](https://github.com/MrOlm/drep/blob/master/helper_scripts/parse_stb.py) to determine which scaffold belongs to which genome before we do strain analyses.  
 Export the path and run the Python program on the fasta files of the HQ bins. We will need the representative_genomes.stb file later for InStrain analysis.
 
-```
+```bash
 export PATH="/projappl/project_2022405/drep-4-0-3/bin:$PATH"
 parse_stb.py --reverse -f HQ_BINS/*fa -o representitve_genomes.stb
 ```
@@ -638,8 +637,7 @@ inStrain is a tool that uses a reference set of genomes or our assemblies and Bo
 
 We will first need to run progical, which predicts genes for us in the assembly. Modify the script below and run interactively/use a batch job with 20G of memory for 20 min with 8 CPUs.
 
-
-```
+```bash
 export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
 prodigal -i assembly.fasta -d genes.fna -a genes.faa
 ```
@@ -650,9 +648,7 @@ Check the [tutorial](https://instrain.readthedocs.io/en/latest/tutorial.html) an
 
 Modify the script below to include the correct BAM files for each recipient mapping and each donor mapping and the DF16 assembply contigs. This can be done in an array script with 50 GB of memory, 5 h of time, and 6 CPUs.
 
-```
+```bash
 export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
 inStrain profile mappingfile.bam DF16_contigs.fasta -o outputlocation.IS -p 6 -g genes.faa -s scaffoldtobin.stb --database_mode
-
 ```
-

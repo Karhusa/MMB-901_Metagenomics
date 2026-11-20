@@ -12,7 +12,7 @@ __Table of Contents:__
 8. [Assembly QC](#assembly-qc)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
 10. [MAG taxonomy](#mag-taxonomy)
-11. [Viral metagenomics](#phage-part)
+11. [Viral metagenomics](#viral-metagnomics)
 12. [Strain engraftment](#strain-engraftment-with-inStrain)
 
 
@@ -471,10 +471,9 @@ So we need to do some command line magic. Or in other words use `awk` to remove 
 
 ```bash
 awk 'NR>1 {print $1"\tSemiBin2_"$2}' 05_BINNING/SemiBin2/contig_bins.tsv > 05_BINNING/SemiBin2/semibin_collection.txt
-````
+```
 
-## DASTool 
-
+## DASTool
 
 [DASTool](https://github.com/cmks/DAS_Tool) is an automated method that integrates the results of binning algorithms to calculate an optimized, non-redundant set of bins.
 
@@ -483,7 +482,7 @@ Familiarize yourself with the GitHub pages of DASTool and prepare a bash script 
 Remember to use the $TMPDIR/SemiBin2 as input for your Fasta_to_Contigs2Bin.sh helper script. Use the interactive node with 10GB memory, 16 CPUs, and 2 h time.
 Direct the output to a new directory /scratch/project_2022405/$USER/MMB-901_Metagenomics/06_DASTOOL/DF16.
 
-```
+```bash
 # Convert SemiBin2 bins (.fa.gz)
 mkdir -p "$TMPDIR/SemiBin2"
 
@@ -492,18 +491,18 @@ for f in "$SEMIBIN"/*.fa.gz; do
     gunzip -c "$f" > "$TMPDIR/SemiBin2/$(basename "${f%.gz}")"
 done
 ```
+
 Also run the following in the script to have DASTool installation available.
 
-```
+```bash
 # Load DAS Tool
 module load bio-apps/v202603
 export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
-
 ```
 
 Once the files are prepared, we will run DASTool with the options --write_bin_evals to write evaluations of input bin sets and --write_bins to export bins as fasta files.
 
-```
+```bash
 # Load DAS Tool
 module load bio-apps/v202603
 export PATH="/projappl/project_2022405/das_tool-1.1.7/bin:$PATH"
@@ -522,13 +521,14 @@ DAS_Tool \
     --write_bin_evals \
     --threads "$SLURM_CPUS_PER_TASK"
 ```
+
 After DASTool has run open the  DF16_DASTool_DASTool_summary.tsv on your computer to view the results. Then create a list of all high-quality MAGs (HQ bins) with SCG_completeness 90 or more and SCG_redundancy 5 or less in a file named DF16_high_quality_bins.txt.
 
 Check how many bins you had and how many of them were high quality before proceeding.
 
 Then write a script to move the high-quality bins to a new directory, HQ_BINS, using DF16_high_quality_bins.txt to select the correct bins to move.
 
-## dRep 
+## dRep
 
 Usually, we need to  dereplicate the bins for further analyses. This can be done using dRep. We will also prepare some files for or strain sharing analysis using dRep. Check the [dRep](https://github.com/MrOlm/drep) manual to see what is does. By chance, the DasTool genomes are already ANI 98% or more divergent, so we don't need to do further dereplication.
 
@@ -557,7 +557,6 @@ __GTDB-Tk:__
 * 10 CPUs
 
 You can use the spades script as a template.
-
 
 ### MAG taxonomy with GTDB-Tk
 

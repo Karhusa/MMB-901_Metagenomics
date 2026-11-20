@@ -8,8 +8,11 @@
 5. [Learning outcomes](#learning-outcomes)
 6. [Organizers and teachers](#organizers-and-teachers)
 
-<img width="2633" height="1704" alt="MMB-901_workflow" src="https://github.com/user-attachments/assets/f1f94a9d-f082-4de4-a642-adb7769e1452" />
+![course workflo](/img/workflow.png " Course workflow")
 
+```
+# <img width="2633" height="1704" alt="MMB-901_workflow" src="https://github.com/user-attachments/assets/f1f94a9d-f082-4de4-a642-adb7769e1452" />
+``` 
 
 ## General introduction
 

@@ -4,6 +4,7 @@
 *.png
 test_data/
 files202?/
+!img/*
 0[0-9]_*/
 .DS_Store
 to-do-before-course.md

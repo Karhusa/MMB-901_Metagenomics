@@ -646,7 +646,7 @@ inStrain has been installed for you in projappl.
 
 Check the [tutorial](https://instrain.readthedocs.io/en/latest/tutorial.html) and create an inStrain profile command using the scaffold file representative_genomes.stb we created using the dRep helper script.
 
-Modify the script below to include the correct BAM files for each recipient mapping and each donor mapping and the DF16 assembply contigs. This can be done in an array script with 50 GB of memory, 5 h of time, and 6 CPUs.
+Modify the script below to include the correct BAM files for each recipient mapping, each donor mapping, and the DF16 assembly contigs. This can be done in an array script with 50 GB of memory, 5 h of time, and 6 CPUs.
 
 ```bash
 export PATH="/projappl/project_2022405/instrain-v1.12.0/bin:$PATH"
